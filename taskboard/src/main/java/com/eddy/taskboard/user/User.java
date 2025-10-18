@@ -15,7 +15,7 @@ public class User {
     @Id
     private UUID id;
 
-    @Column(nullable = false, unique = true)
+    @Column(nullable = false, unique = true, columnDefinition = "citext")
     private String email;   // unique login identifier
 
     @Column(name = "password_hash", nullable = false)
