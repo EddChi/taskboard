@@ -27,8 +27,7 @@ public class WorkspaceController {
     // creates a new workspace
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public WorkspaceResponse create(@Valid @RequestBody CreateWorkspaceRequest body,
-                                    Authentication auth) {
+    public WorkspaceResponse create(@Valid @RequestBody CreateWorkspaceRequest body, Authentication auth) {
         // temporary user mapping, fake UUID until user accounts exist
         UUID creatorId = UUID.nameUUIDFromBytes(auth.getName().getBytes());
         return service.create(body, creatorId);
