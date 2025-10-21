@@ -56,7 +56,8 @@ public class SecurityConfig {
                     "/api/v1/health",   // Health check endpoint
                     "/swagger-ui.html", // Swagger UI main page
                     "/swagger-ui/**",   // any other Swagger UI pages
-                    "/v3/api-docs/**"   // OpenAPI JSON
+                    "/v3/api-docs/**",   // OpenAPI JSON
+                    "/api/v1/auth/register"
                 ).permitAll()   // public access to all the above
                 .anyRequest().authenticated()   // everything else requires a login
             )
