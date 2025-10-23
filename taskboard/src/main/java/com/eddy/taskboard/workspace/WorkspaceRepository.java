@@ -3,6 +3,8 @@ package com.eddy.taskboard.workspace;
 // imports
 import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.UUID;
+import java.util.List;
+import java.util.Optional;
 
 /**
  * data access layer for Workspaces
@@ -10,4 +12,8 @@ import java.util.UUID;
  */
 
 public interface WorkspaceRepository extends JpaRepository<Workspace, UUID> {
+    
+    List<Workspace> findAllByCreatedBy(UUID createdBy);
+
+    Optional<Workspace> findByIdAndCreatedBy(UUID id, UUID createdBy);
 }
