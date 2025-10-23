@@ -4,11 +4,14 @@ import com.eddy.taskboard.workspace.dto.CreateWorkspaceRequest;
 import com.eddy.taskboard.workspace.dto.WorkspaceResponse;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
-import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.UUID;
+
+import com.eddy.taskboard.user.AuthUserDetails;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 
 /**
  * RestController exposing API endpoints for workspaces
@@ -24,13 +27,18 @@ public class WorkspaceController {
         this.service = service;
     }
 
+    @Operation(
+            summary = "Create a new workspace",
+            description = "Automatically sets `createdBy` to the authenticated user's ID.",
+            security = {@SecurityRequirement(name = "bearerAuth")}
+    )
+
     // creates a new workspace
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public WorkspaceResponse create(@Valid @RequestBody CreateWorkspaceRequest body, Authentication auth) {
-        // temporary user mapping, fake UUID until user accounts exist
-        UUID creatorId = UUID.nameUUIDFromBytes(auth.getName().getBytes());
-        return service.create(body, creatorId);
+    public WorkspaceResponse create(@Valid @RequestBody CreateWorkspaceRequest body,
+                                    @AuthenticationPrincipal AuthUserDetails user) {
+        return service.create(body, user.getId());
     }
 
     // lists all workspaces in the system
