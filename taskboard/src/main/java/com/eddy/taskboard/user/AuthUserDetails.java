@@ -24,7 +24,7 @@ public class AuthUserDetails implements UserDetails {
     }
 
     // expose database id for controllers/services that need it later
-    public UUID getId() {
+    public UUID getuserId() {
         return id;
     }
 

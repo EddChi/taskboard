@@ -12,8 +12,8 @@ import java.util.Optional;
  */
 
 public interface WorkspaceRepository extends JpaRepository<Workspace, UUID> {
-    
+
     List<Workspace> findAllByCreatedBy(UUID createdBy);
 
-    Optional<Workspace> findByIdAndCreatedBy(UUID id, UUID createdBy);
+    Optional<Workspace> findByIdAndCreatedBy(UUID userId, UUID createdBy);
 }

@@ -24,11 +24,11 @@ public class WorkspaceService {
     }
 
     // creates a new workspace
-    public WorkspaceResponse create(CreateWorkspaceRequest req, UUID creatorId) {
+    public WorkspaceResponse create(CreateWorkspaceRequest req, UUID userId) {
         var entity = new Workspace(
                 UUID.randomUUID(),  // generate unique ID
                 req.name().trim(),  // trim name to avoid trailing spaces
-                creatorId,  // Assign creator
+                userId,  // Assign creator
                 OffsetDateTime.now(ZoneOffset.UTC)  // uses UTC timestamp
         );
 
@@ -37,15 +37,34 @@ public class WorkspaceService {
     }
 
     // returns all existing workspaces
+    @Deprecated
     public List<WorkspaceResponse> list() {
         return repo.findAll().stream()
                 .map(this::toResponse)
                 .toList();
     }
 
+    // list only the caller's workspaces
+    public List<WorkspaceResponse> listUserWorkspaces(UUID userId) {
+        return repo.findAllByCreatedBy(userId).stream()
+                .map(this::toResponse)
+                .toList();
+    }
+
+    // get a single workspace owned by caller, else 404-equivalent via exception
+    public WorkspaceResponse getUserWorkspace(UUID workspaceId, UUID userId) {
+        var ws = repo.findByIdAndCreatedBy(workspaceId, userId)
+                .orElseThrow(() -> new WorkspaceNotFoundException(workspaceId));
+        return toResponse(ws);
+    }
+
     // helper to convert from entity to DTO
     private WorkspaceResponse toResponse(Workspace w) {
-        return new WorkspaceResponse(w.getId(), w.getName(), w.getCreatedBy(), w.getCreatedAt());
+        return new WorkspaceResponse(
+                w.getuserId(),
+                w.getName(),
+                w.getCreatedBy(),
+                w.getCreatedAt());
     }
 }
 

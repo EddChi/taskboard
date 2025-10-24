@@ -16,7 +16,7 @@ public class Workspace {
 
     // primary key (universally unique identifier)
     @Id
-    private UUID id;
+    private UUID userId;
 
     @Column
     private String name;
@@ -33,15 +33,15 @@ public class Workspace {
     protected Workspace() {}
 
     // argument constructor
-    public Workspace(UUID id, String name, UUID createdBy, OffsetDateTime createdAt) {
-        this.id = id;
+    public Workspace(UUID userId, String name, UUID createdBy, OffsetDateTime createdAt) {
+        this.userId = userId;
         this.name = name;
         this.createdBy = createdBy;
         this.createdAt = createdAt;
     }
 
     // getters
-    public UUID getId() { return id; }
+    public UUID getuserId() { return userId; }
     public String getName() { return name; }
     public UUID getCreatedBy() { return createdBy; }
     public OffsetDateTime getCreatedAt() { return createdAt; }
